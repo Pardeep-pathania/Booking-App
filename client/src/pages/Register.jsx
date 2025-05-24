@@ -4,30 +4,35 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { FaArrowLeft } from "react-icons/fa";
 import { authDataContext } from '../context/AuthContext';
+import { userDataContext } from '../context/UserContext';
 
 const Register = () => {
 
     const navigate = useNavigate()
     const {serverUrl} = useContext(authDataContext)
-
+  const {userData, setUserData} = useContext(userDataContext)
       const [formdata, setFormdata] = useState({
         name: '',
         email: '',
         password: ''    
     })
 
-    function handleSubmit(e){
-        e.preventDefault()
-        axios.post( serverUrl + "/users/register", formdata)
-        .then((res)=>{
-            alert("User registered successfully")
-            console.log(res.data)
+    async function handleSubmit(e){
+
+      try {
+       e.preventDefault()
+        let result =await axios.post( serverUrl + "/auth/register", formdata,{withCredentials:true})
+        c
+
+alert("User registered successfully")
+        setUserData(result.data)
+            console.log(result)
             navigate('/login')
-        })
-        .catch((err)=>{
-            alert(err.response.data)
-            console.log(err)
-        })
+
+      } catch (error) {
+         alert(error.response)
+            console.log(error)
+      }
     }
 
   return (

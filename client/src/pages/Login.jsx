@@ -3,29 +3,35 @@ import Navbar from '../components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
+import { userDataContext } from '../context/UserContext'
 
 const Login = () => {
 
 const navigate = useNavigate()
 const {serverUrl} = useContext(authDataContext)
-
+const {userData, setUserData}= useContext(userDataContext)
       const [formdata, setFormdata] = useState({
         email: '',
         password: ''    
     })
 
-    function handleSubmit(e){
+    async function handleSubmit(e){
+
+      try {
+
         e.preventDefault()
-        axios.post( serverUrl + "/users/login", formdata)
-        .then((res)=>{
-            alert("User Logged In successfully")
-            console.log(res.data)
+       let result = await axios.post( serverUrl + "/auth/login", formdata,{withCredentials:true})
+
+       setUserData(result.data)
+
+         alert("User Logged In successfully")
+            console.log(result.data)
             navigate('/')
-        })
-        .catch((err)=>{
-            alert(err.response.data)
-            console.log(err)
-        })
+        
+      } catch (error) {
+        alert(error.response)
+            console.log(error)
+      }
     }
 
   return (

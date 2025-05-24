@@ -16,18 +16,20 @@ import { BiBuildingHouse } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
+import { userDataContext } from "../context/UserContext";
 
 const Navbar = () => {
   const navigate = useNavigate()
 
   const{serverUrl} = useContext(authDataContext)
-
+  const { userData, setUserData } = useContext(userDataContext);
   const [showpopup, setShowpopup] = useState(false);
 
   const handleLogout = async()=>{
     try {
 
-      let result = await axios.post(serverUrl + "/users/logout",{withCredentials:true})
+      let result = await axios.post(serverUrl + "/auth/logout",{withCredentials:true})
+      setUserData(null)
       console.log(result.data)
       
     } catch (error) {
@@ -64,9 +66,10 @@ const Navbar = () => {
             <span>
               <FaBars className="text-lg" />
             </span>
-            <span>
+            {userData == null && <span>
               <FaRegUserCircle className="text-lg" />
-            </span>
+            </span>}
+            {userData !== null && <span className="w-[30px] h-[30px] bg-[#080808] text-white rounded-full flex items-center justify-center ">{userData?.name.slice(0,1).toUpperCase()}</span>}
           </button>
 
          {showpopup && <div className="w-[220px] h-[270px] absolute bg-white top-[19%] right-[5%] border border-gray-300 shadow-lg z-10 rounded-lg p-4">
