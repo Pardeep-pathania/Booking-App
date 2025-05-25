@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { listingDataContext } from '../context/ListingContext';
 
 const ListingPage1 = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    rent: '',
-    city: '',
-    landmark: '',
-    category: '',
-    image1: '',
-    image2: '',
-    image3: '',
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  let { title,setTitle,
+    description,setDescription,
+    rent,setRent,
+    city,
+    setCity,
+    landmark,
+    setLandmark,
+    category,
+    setCategory,
+    frontEndImage1,
+    setFrontEndImage1,
+    frontEndImage2,
+    setFrontEndImage2,
+    frontEndImage3,
+    setFrontEndImage3,
+    backEndImage1,
+    setBackEndImage1,
+    backEndImage2,
+    setBackEndImage2,
+    backEndImage3,
+    setBackEndImage3, } = useContext(listingDataContext)
+
+
+  const handleImage1 = (e)=>{
+    let file = e.target.files[0]
+    setBackEndImage1(file)
+    setFrontEndImage1(URL.createObjectURL(file))
+  }
+  const handleImage2 = (e)=>{
+    let file = e.target.files[0]
+    setBackEndImage2(file)
+    setFrontEndImage2(URL.createObjectURL(file))
+  }
+  const handleImage3 = (e)=>{
+    let file = e.target.files[0]
+    setBackEndImage3(file)
+    setFrontEndImage3(URL.createObjectURL(file))
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/listingpage2')
   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log(formData);
-//   };
 
   return (
     <div className="relative">
@@ -37,7 +57,7 @@ const ListingPage1 = () => {
       {/* Form Content */}
       <div className="mt-8 max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg max-h-[80vh] overflow-y-auto">
         
-        <form  className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
             <div
         className="w-[50px] h-[50px] cursor-pointer bg-red-600 absolute top-[5%] left-[20px] rounded-full flex items-center justify-center"
         onClick={() => navigate('/')}
@@ -54,8 +74,9 @@ const ListingPage1 = () => {
               id="title"
               name="title"
               type="text"
-              value={formData.title}
-              onChange={handleChange}
+              value={title}
+              placeholder='_bhk house or best title'
+              onChange={(e)=>{setTitle(e.target.value)}}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -66,8 +87,8 @@ const ListingPage1 = () => {
             <textarea
               id="description"
               name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e)=>{setDescription(e.target.value)}}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -79,8 +100,9 @@ const ListingPage1 = () => {
               id="rent"
               name="rent"
               type="number"
-              value={formData.rent}
-              onChange={handleChange}
+              value={rent}
+              placeholder='Rs____/day'
+               onChange={(e)=>{setRent(e.target.value)}}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -92,8 +114,9 @@ const ListingPage1 = () => {
               id="city"
               name="city"
               type="text"
-              value={formData.city}
-              onChange={handleChange}
+              placeholder='city,country'
+              value={city}
+               onChange={(e)=>{setCity(e.target.value)}}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -105,21 +128,8 @@ const ListingPage1 = () => {
               id="landmark"
               name="landmark"
               type="text"
-              value={formData.landmark}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-            <input
-              id="category"
-              name="category"
-              type="text"
-              value={formData.category}
-              onChange={handleChange}
+              value={landmark}
+               onChange={(e)=>{setLandmark(e.target.value)}}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -131,7 +141,7 @@ const ListingPage1 = () => {
               id="image1"
               name="image1"
               type="file"
-             
+             onChange={handleImage1}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -143,7 +153,7 @@ const ListingPage1 = () => {
               id="image2"
               name="image2"
               type="file"
-             
+             onChange={handleImage2}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -155,18 +165,18 @@ const ListingPage1 = () => {
               id="image3"
               name="image3"
               type="file"
-              
+              onChange={handleImage3}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
-          <Link to={'/listingpage2'}
+          <button
             type="submit"
             className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Create Listing
-          </Link>
+          </button>
         </form>
       </div>    
     </div>

@@ -1,4 +1,4 @@
-const uploadCloudinary = require('../config/cloudinary.js');
+const {uploadOnCloudinary} = require('../config/cloudinary.js');
 const Listing = require('../models/listingModel.js');
 const Users = require('../models/userModel.js');
 
@@ -6,9 +6,9 @@ const addListing = async(req,res) =>{
     try {
         let host = req.userId;
         let data = req.body;
-        let image1 = await uploadCloudinary(res.files.image1[0].path);
-        let image2 = await uploadCloudinary(res.files.image2[0].path);
-        let image3 = await uploadCloudinary(res.files.image3[0].path);
+        let image1 = await uploadOnCloudinary(req.files.image1[0].path);
+        let image2 = await uploadOnCloudinary(req.files.image2[0].path);
+        let image3 = await uploadOnCloudinary(req.files.image3[0].path);
 
 
         let listing = await Listing.create({

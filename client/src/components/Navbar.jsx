@@ -58,7 +58,8 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center justify-center gap-4 ">
-          <span className="text-lg cursor-pointer rounded-full hover:bg-[#ded9d9] px-4 py-2">
+          <span className="text-lg cursor-pointer rounded-full hover:bg-[#ded9d9] px-4 py-2"
+          onClick={()=>navigate('/listingpage1')}>
             List your home
           </span>
           <button
@@ -72,16 +73,23 @@ const Navbar = () => {
             {userData !== null && <span className="w-[30px] h-[30px] bg-[#080808] text-white rounded-full flex items-center justify-center ">{userData?.name.slice(0,1).toUpperCase()}</span>}
           </button>
 
-         {showpopup && <div className="w-[220px] h-[270px] absolute bg-white top-[19%] right-[5%] border border-gray-300 shadow-lg z-10 rounded-lg p-4">
+         {showpopup && <div className="w-[220px] h-[240px] absolute bg-white top-[12%] right-[5%] border border-gray-300 shadow-lg z-10 rounded-lg p-4">
   <ul className="flex flex-col gap-3 text-gray-700">
-    <li onClick={()=>navigate('/login')} className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
+    {!userData ? <li onClick={()=>{navigate('/login');
+    setShowpopup(false)
+
+    }} className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
       Login
-    </li>
+    </li>:
     <li
-    onClick={handleLogout} className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
+    onClick={()=>{handleLogout();
+      setShowpopup(false)
+    }} className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
       Logout
-    </li>
-    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
+    </li>}
+    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium" onClick={()=>{navigate('/listingpage1');
+      setShowpopup(false)
+    }}>
       List your home
     </li>
     <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
@@ -120,7 +128,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <MdBedroomParent className="w-6 h-6 text-black" />
-          <h3>Trending</h3>
+          <h3>Rooms</h3>
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <MdOutlinePool className="w-6 h-6 text-black" />
@@ -128,15 +136,15 @@ const Navbar = () => {
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <GiWoodCabin  className="w-6 h-6 text-black" />
-          <h3>Trending</h3>
+          <h3>Cabins</h3>
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <SiHomeassistantcommunitystore  className="w-6 h-6 text-black" />
-          <h3>Trending</h3>
+          <h3>Shops</h3>
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <IoBedOutline  className="w-6 h-6 text-black" />
-          <h3>Trending</h3>
+          <h3>PG</h3>
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <FaTreeCity  className="w-6 h-6 text-black" />
@@ -144,7 +152,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
           <BiBuildingHouse  className="w-6 h-6 text-black" />
-          <h3>Trending</h3>
+          <h3>Flat</h3>
         </div>
         
       </div>
