@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import { createContext } from "react";
@@ -16,12 +16,17 @@ const ListingContext = ({ children }) => {
   const [landmark, setLandmark] = useState("");
   const [category, setCategory] = useState("");
   const [adding, setAdding] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [frontEndImage1, setFrontEndImage1] = useState(null);
   const [frontEndImage2, setFrontEndImage2] = useState(null);
   const [frontEndImage3, setFrontEndImage3] = useState(null);
   const [backEndImage1, setBackEndImage1] = useState(null);
   const [backEndImage2, setBackEndImage2] = useState(null);
   const [backEndImage3, setBackEndImage3] = useState(null);
+  const [listingData, setListingData] = useState([])
+  const [newListData, setNewListData] = useState([])
+  const [cardDetails, setCardDetails] = useState(null)
 
   const navigate = useNavigate()
 
@@ -70,6 +75,39 @@ const ListingContext = ({ children }) => {
     }
   };
 
+
+  const handleViewCard = async(id)=>{
+    try {
+      let result = await axios.get(serverUrl + `/listing/findlistingByid/${id}`,{withCredentials:true})
+
+      setCardDetails(result.data)
+      console.log(result)
+      navigate("/viewcard")
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+const getListing = async()=>{
+  try {
+
+    let result = await axios.get(serverUrl + "/listing/get", {withCredentials:true})
+
+    setListingData(result.data)
+    setNewListData(result.data)
+    
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+useEffect(()=>{
+  getListing()
+},[adding,updating])
+
+
   let value = {
     title,setTitle,
     description,setDescription,
@@ -92,8 +130,11 @@ const ListingContext = ({ children }) => {
     setBackEndImage2,
     backEndImage3,
     setBackEndImage3,
-
-    handleAddListing,
+    adding, setAdding,
+    newListData, setNewListData,deleting, setDeleting,
+    handleAddListing,updating, setUpdating,
+    listingData, setListingData, getListing, handleViewCard, cardDetails, setCardDetails
+    
   };
 
   return (

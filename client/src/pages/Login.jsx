@@ -15,8 +15,11 @@ const {userData, setUserData}= useContext(userDataContext)
         password: ''    
     })
 
+    let {loading, setLoading} = useContext(authDataContext)
+
     async function handleSubmit(e){
 
+      setLoading(true)
       try {
 
         e.preventDefault()
@@ -25,11 +28,13 @@ const {userData, setUserData}= useContext(userDataContext)
        setUserData(result.data)
 
          alert("User Logged In successfully")
+         setLoading(false)
             console.log(result.data)
             navigate('/')
         
       } catch (error) {
         alert(error.response)
+        setLoading(false)
             console.log(error)
       }
     }
@@ -61,9 +66,9 @@ const {userData, setUserData}= useContext(userDataContext)
             />
             <button
               type="submit"
-              className='bg-purple-600 text-white font-semibold py-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 transition'
+              className='bg-purple-600 text-white font-semibold py-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 transition' disabled = {loading}
             >
-              Login
+              {loading?"Submitting":"Login"}
             </button>
             <div className='text-center py-1 text-gray-500'>
                 Dont have an account? <Link to={'/register'} className='text-purple-600 hover:underline'>Register</Link>

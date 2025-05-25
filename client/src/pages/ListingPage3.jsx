@@ -78,7 +78,9 @@ text-ellipsis text-nowrap overflow-hidden "
     {`Rs. ${rent}/day `}
         </div>
        <div className="w-[95%] h-[50px] flex items-center justify-start px-[110px] ">
-         <button className='px-[50px] py-[10px] bg-red-600 text-white text-[18px] md:px-[100px] rounded-lg ' onClick={handleAddListing} >Add Listing</button>
+         <button className='px-[30px] py-[10px] bg-red-600 text-white text-[18px] md:px-[100px] rounded-lg text-nowrap' onClick={handleAddListing} disabled={adding} >
+            {adding? "adding...": "Add Listing"}
+         </button>
        </div>
     </div>
   );

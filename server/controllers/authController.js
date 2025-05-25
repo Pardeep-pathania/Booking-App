@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
 let loginUser = async (req, res) => {
   let data = req.body;
   try {
-    let existingUser = await Users.findOne({ email: data.email });
+    let existingUser = await Users.findOne({ email: data.email }).populate("listing","title image1 image2 image3 description rent category city landmark");
 
     if (!existingUser) {
       return res.status(400).json({ message: "User Not Found" });

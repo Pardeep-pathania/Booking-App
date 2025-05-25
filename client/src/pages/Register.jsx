@@ -17,20 +17,27 @@ const Register = () => {
         password: ''    
     })
 
+    let {loading, setLoading} = useContext(authDataContext)
+
     async function handleSubmit(e){
+      setLoading(true)
 
       try {
        e.preventDefault()
         let result =await axios.post( serverUrl + "/auth/register", formdata,{withCredentials:true})
-        c
+        
 
 alert("User registered successfully")
+      setLoading(false)
+
         setUserData(result.data)
             console.log(result)
             navigate('/login')
 
       } catch (error) {
          alert(error.response)
+      setLoading(false)
+
             console.log(error)
       }
     }
@@ -68,9 +75,9 @@ alert("User registered successfully")
             />
             <button
               type="submit"
-              className='bg-purple-600 text-white font-semibold py-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 transition'
+              className='bg-purple-600 text-white font-semibold py-3 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 transition' disabled = {loading}
             >
-              Register
+              {loading? "Submitting...":"SignUp"}
             </button>
             <div className='text-center py-1 text-gray-500'>
                 Already have an account? <Link to={'/login'} className='text-purple-600 hover:underline'>Login here</Link>

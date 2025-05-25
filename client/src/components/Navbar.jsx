@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
 import { userDataContext } from "../context/UserContext";
+import { listingDataContext } from "../context/ListingContext";
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -24,6 +25,9 @@ const Navbar = () => {
   const{serverUrl} = useContext(authDataContext)
   const { userData, setUserData } = useContext(userDataContext);
   const [showpopup, setShowpopup] = useState(false);
+  const [cate, setCate] = useState()
+
+  let {listingData,setListingData, newListData, setNewListData} = useContext(listingDataContext)
 
   const handleLogout = async()=>{
     try {
@@ -37,9 +41,19 @@ const Navbar = () => {
     }
   }
 
+
+  const handleCategory = (category)=>{
+    setCate(category)
+    if(category == "trending"){
+      setNewListData(listingData)
+    }
+    else{    setNewListData(listingData.filter((list)=>list.category == category))
+    }
+  }
+
   return (
-    <div>
-      <div className=" px-4 w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] flex items-center justify-between">
+    <div className="fixed top-0 bg-white">
+      <div className=" px-4 w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] flex items-center justify-between ">
         <a href="" className="flex items-center gap-1">
           <PiPaperPlaneBold className="text-2xl" />
           <span className="text-xl font-bold">bookly</span>
@@ -92,7 +106,9 @@ const Navbar = () => {
     }}>
       List your home
     </li>
-    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
+    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium"  onClick={()=>{navigate('/mylisting');
+      setShowpopup(false)
+    }} >
       My Listing
     </li>
     <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
@@ -117,40 +133,40 @@ const Navbar = () => {
         </div>
 
       <div className="w-[100vw] h-[85px] bg-white flex items-center justify-start md:justify-center px-[15px] cursor-pointer gap-6 overflow-auto">
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap" onClick={()=>{handleCategory("trending"); setCate("")}}>
           <MdWhatshot className="w-6 h-6 text-black" />
           <h3>Trending</h3>
         </div>
 
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="vila"?"border-b-1":""}`} onClick={()=>handleCategory("villa")}>
           <GiFamilyHouse className="w-6 h-6 text-black" />
-          <h3>Vila</h3>
+          <h3>Villa</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="rooms"?"border-b-1":""}`} onClick={()=>handleCategory("rooms")}>
           <MdBedroomParent className="w-6 h-6 text-black" />
           <h3>Rooms</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="poolhouse"?"border-b-1":""}`} onClick={()=>handleCategory("poolhouse")}>
           <MdOutlinePool className="w-6 h-6 text-black" />
           <h3>Pool House</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="cabins"?"border-b-1":""}`} onClick={()=>handleCategory("cabins")}>
           <GiWoodCabin  className="w-6 h-6 text-black" />
           <h3>Cabins</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="shops"?"border-b-1":""}`} onClick={()=>handleCategory("shops")}>
           <SiHomeassistantcommunitystore  className="w-6 h-6 text-black" />
           <h3>Shops</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="pg"?"border-b-1":""}`} onClick={()=>handleCategory("pg")}>
           <IoBedOutline  className="w-6 h-6 text-black" />
           <h3>PG</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="farmhouse"?"border-b-1":""}`} onClick={()=>handleCategory("farmhouse")}>
           <FaTreeCity  className="w-6 h-6 text-black" />
           <h3>Farm House</h3>
         </div>
-        <div className="flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap">
+        <div className= {`flex items-center justify-center flex-col hover:border-b-[1px] border-[#a6a5a5] text-md text-nowrap ${cate =="flat"?"border-b-1":""}`} onClick={()=>handleCategory("flat")}>
           <BiBuildingHouse  className="w-6 h-6 text-black" />
           <h3>Flat</h3>
         </div>

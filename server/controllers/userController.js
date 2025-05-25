@@ -2,7 +2,7 @@ const Users = require("../models/userModel")
 
 const getCurrentUser = async(req,res)=>{
     try {
-        let user = await Users.findById(req.userId).select("-password")
+        let user = await Users.findById(req.userId).select("-password").populate("listing","title image1 image2 image3 description rent category city landmark")
         if(!user){
            return res.status(400).json({message:"User not found"})
         }
