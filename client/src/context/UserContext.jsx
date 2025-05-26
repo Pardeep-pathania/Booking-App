@@ -32,7 +32,7 @@ const UserContext = ({children}) => {
 
     let value = {
         userData,
-        setUserData
+        setUserData,getCurrentUser
     }
 
   return (

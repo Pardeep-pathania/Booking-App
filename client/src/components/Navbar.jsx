@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { IoSearch } from "react-icons/io5";
 import { PiPaperPlaneBold } from "react-icons/pi";
@@ -25,9 +25,11 @@ const Navbar = () => {
   const{serverUrl} = useContext(authDataContext)
   const { userData, setUserData } = useContext(userDataContext);
   const [showpopup, setShowpopup] = useState(false);
-  const [cate, setCate] = useState()
+  const [cate, setCate] = useState("")
+  const [input, setInput] = useState("")
+  
 
-  let {listingData,setListingData, newListData, setNewListData} = useContext(listingDataContext)
+  let {listingData,setListingData, newListData, setNewListData, handleSearch,searchData,handleViewCard} = useContext(listingDataContext)
 
   const handleLogout = async()=>{
     try {
@@ -41,6 +43,13 @@ const Navbar = () => {
     }
   }
 
+  const handleClick = (id) => {
+    if (userData) {
+      handleViewCard(id);
+    }
+    navigate("/login");
+  };
+
 
   const handleCategory = (category)=>{
     setCate(category)
@@ -51,8 +60,12 @@ const Navbar = () => {
     }
   }
 
+  useEffect(()=>{
+    handleSearch(input)
+  },[input])
+
   return (
-    <div className="fixed top-0 bg-white">
+    <div className="fixed top-0 bg-white z-[20]">
       <div className=" px-4 w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] flex items-center justify-between ">
         <a href="" className="flex items-center gap-1">
           <PiPaperPlaneBold className="text-2xl" />
@@ -64,7 +77,7 @@ const Navbar = () => {
             type="text"
             className="w-[100%] px-[30px] py-[8px] border-[2px] border-[#bdbaba] outline-none overflow-auto rounded-xl text-lg"
             placeholder="Any Where  |  Any Location  | 
-           Any City"
+           Any City" onChange={(e)=>{setInput(e.target.value)}} value={input}
           />
           <button className="absolute bg-[#F5385D] rounded-full p-2 right-[2%] top-[4px]">
             <IoSearch className="w-[22px] h-[22px] text-white " />
@@ -111,13 +124,30 @@ const Navbar = () => {
     }} >
       My Listing
     </li>
-    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium">
+    <li className="px-3 py-2 rounded-md cursor-pointer hover:bg-indigo-100 hover:text-indigo-700 transition font-medium" onClick={()=>{navigate('/mybooking');
+      setShowpopup(false)
+    }} >
       Check Booking
     </li>
   </ul>
 </div>
 }
         </div>
+
+ {searchData?.length>0 && <div className="w-[100vw] h-[450px] flex flex-col gap-5 absolute top-[40%] bg-white overflow-auto left-0 justify-start items-center ">
+  <div className="max-w-[700px] w-[100vw] h-[300px] overflow-hidden flex flex-col bg-[##fefdfd] p-5 rounded-lg border-1 border-slate-400 cursor-pointer ">
+{
+  searchData.map((search)=>(
+    <div className="border-b border-black p-2" onClick={()=>handleClick(search._id)} key={search._id}>
+      {search.title} in {search.landmark}, {search.city}
+    </div>
+  ))
+}
+
+  </div>
+  </div>}
+
+
       </div>
 
       <div className="w-[100%] relative md:hidden block">

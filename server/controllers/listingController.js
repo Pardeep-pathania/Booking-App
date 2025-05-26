@@ -1,6 +1,6 @@
 const {uploadOnCloudinary} = require('../config/cloudinary.js');
 const Listing = require('../models/listingModel.js');
-const Users = require('../models/userModel.js');
+const User = require('../models/userModel.js');
 
 const addListing = async(req,res) =>{
     try {
@@ -22,7 +22,7 @@ const addListing = async(req,res) =>{
             image3: image3
         })
 
-        let user = await Users.findByIdAndUpdate(host, {$push:{listing:listing._id}}, {new:true})
+        let user = await User.findByIdAndUpdate(host, {$push:{listing:listing._id}}, {new:true})
         if(!user){
             return res.status(400).json({message:"User not found"})
         }
@@ -88,7 +88,7 @@ const updateListing = async(req,res)=>{
 const deleteListing =async(req,res)=>{
     try {let {id} = req.params
     let listing = await Listing.findByIdAndDelete(id)
-       let user = await Users.findByIdAndUpdate(listing.host,{$pull:{listing:listing._id}},{new:true})
+       let user = await User.findByIdAndUpdate(listing.host,{$pull:{listing:listing._id}},{new:true})
 
     if(!user){
         return res.status(401).json({message:"User not found"})
@@ -100,4 +100,40 @@ const deleteListing =async(req,res)=>{
     }
 }
 
-module.exports = {addListing, getListing,findListing, updateListing, deleteListing}
+const ratingListing = async(req,res)=>{
+    try {
+        let {id} = req.params;
+        let {ratings} = req.body;
+        let listing = await Listing.findById(id)
+        if(!listing){
+            return res.status(404).json({message:"Listing not found"})
+        }
+        listing.ratings = Number(ratings)
+        await listing.save();
+        return res.status(200).json({ratings:listing.listing})
+    } catch (error) {
+        return res.status(500).json({message:`Rating error ${error}`})
+    }
+}
+
+const search = async(req,res)=>{
+    try {
+        let {query} = req.query;
+        if(!query){
+            return res.status(400).json({message:"Search query is required"})
+        }
+       let listing = await Listing.find({
+    $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { city: { $regex: query, $options: 'i' } },
+        { landmark: { $regex: query, $options: 'i' } }
+    ]
+})
+
+        res.status(200).json(listing)
+    } catch (error) {
+        res.status(500).json({message:`Search error ${error}`})
+    }
+}
+
+module.exports = {addListing, getListing,findListing, updateListing, deleteListing,ratingListing, search}

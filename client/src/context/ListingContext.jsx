@@ -27,6 +27,7 @@ const ListingContext = ({ children }) => {
   const [listingData, setListingData] = useState([])
   const [newListData, setNewListData] = useState([])
   const [cardDetails, setCardDetails] = useState(null)
+  const [searchData, setSearchData] = useState([])
 
   const navigate = useNavigate()
 
@@ -74,6 +75,18 @@ const ListingContext = ({ children }) => {
 
     }
   };
+
+
+  const handleSearch = async(data)=>{
+    try {
+      let result = await axios.get(serverUrl + `/listing/search?query=${data}`)
+      setSearchData(result.data)
+      
+    } catch (error) {
+      setSearchData(null)
+      console.log(error)
+    }
+  }
 
 
   const handleViewCard = async(id)=>{
@@ -130,10 +143,10 @@ useEffect(()=>{
     setBackEndImage2,
     backEndImage3,
     setBackEndImage3,
-    adding, setAdding,
+    adding, setAdding,searchData, setSearchData,
     newListData, setNewListData,deleting, setDeleting,
     handleAddListing,updating, setUpdating,
-    listingData, setListingData, getListing, handleViewCard, cardDetails, setCardDetails
+    listingData, setListingData, getListing, handleViewCard, cardDetails, setCardDetails,handleSearch
     
   };
 

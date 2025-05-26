@@ -1,7 +1,8 @@
 const express = require("express");
 const isAuth = require("../middlewares/isAuth");
 const upload = require("../middlewares/multer");
-const { addListing, getListing, findListing, updateListing, deleteListing } = require("../controllers/listingController");
+const { addListing, getListing, findListing, updateListing, deleteListing, ratingListing } = require("../controllers/listingController");
+const { search } = require("../controllers/listingController");
 
 const router = express.Router();
 
@@ -18,7 +19,9 @@ router.put("/update/:id", isAuth, upload.fields([
 ]), updateListing);
 
 router.get("/get", getListing)
+router.get("/search", search)
 router.get("/findlistingbyid/:id",isAuth, findListing)
 router.delete("/deletelisting/:id",isAuth, deleteListing)
+router.post("/ratings/:id",isAuth, ratingListing)
 
 module.exports = router;

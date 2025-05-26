@@ -1,15 +1,16 @@
- const mongoose = require(mongoose);
+ const mongoose = require('mongoose');
 
  const bookingSchema = new mongoose.Schema({
     host:{
+        type: mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
     },
     guest:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User' 
         
-        },
+        }, 
     listing:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Listing',
@@ -35,3 +36,5 @@
  },{timestamps:true})
 
  const Booking = mongoose.model("Booking", bookingSchema)
+
+ module.exports = Booking

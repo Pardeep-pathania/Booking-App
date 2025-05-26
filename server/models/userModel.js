@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -20,10 +21,10 @@ const userSchema = new mongoose.Schema({
     }],
     booking:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Listing'
+        ref:'Booking'
     }]
 },{timestamps:true})
 
-const Users = mongoose.model('users', userSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports = Users;
+module.exports = User;

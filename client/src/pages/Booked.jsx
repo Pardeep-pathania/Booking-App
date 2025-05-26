@@ -1,0 +1,81 @@
+import React, { useContext, useState } from 'react'
+import { GiConfirmed } from "react-icons/gi";
+import {FaStar} from "react-icons/fa";
+import { bookingDataContext } from '../context/BookingContext';
+import { Link, useNavigate } from 'react-router-dom';
+import Star from '../components/Star';
+import { authDataContext } from '../context/AuthContext';
+import { userDataContext } from '../context/UserContext';
+import { listingDataContext } from '../context/ListingContext';
+
+
+const Booked = () => {
+    let {bookingData} = useContext(bookingDataContext)
+    const [star,setStar] = useState(null)
+    let {serverUrl}= useContext(authDataContext)
+    let {currentUser} = useContext(userDataContext)
+    let {getListing} = useContext(listingDataContext)
+    let {cardDetails} = useContext(listingDataContext)
+
+    let navigate = useNavigate()
+
+
+    const handleRating = async(id)=>{
+        try {
+            let result = await axios.post(serverUrl + `/booking/ratings/${id}`,{
+                rating:star
+            },{withCredentials:true})
+            await getListing()
+            await getCurrentUser()
+            console.log(result)
+            navigate('/')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const handleStar = async(value)=>{
+        setStar(value)
+        console.log("you rated", value)
+    }
+
+  return (
+    <div className='w-[100vw] min-h-[100vh] flex items-center justify-center gap-[30px] bg-slate-200 flex-col '>
+
+        <div className='w-[95%] max-w-[500px] h-[400px] bg-white flex items-center justify-center border-1 border-slate-300 flex-col gap-5 p-6 md:w-[80%] rounded-lg '>
+
+    <div className='w-[100%] h-[50%] text-xl flex items-center justify-center flex-col gap-6 font-semibold '><GiConfirmed className="w-[100px] h-[100px] text-green-700 "/> 
+    Booking Confirmed
+    </div>
+    <div className='w-[100%] text-xl flex items-center justify-between  '>
+    <span>Booking Id:<span>{bookingData._id}</span></span>
+    </div>
+    <div className='w-[100%] text-xl flex items-center justify-between  '>
+    <span>Owner Details:<span>{bookingData.host?.email}</span></span>
+    </div>
+    <div className='w-[100%] text-xl flex items-center justify-between  '>
+    <span>Total Rent:<span>{bookingData.totalRent}</span></span>
+    </div>
+        </div>
+
+        <div className='w-[95%] max-w-[600px] h-[200px] bg-white flex items-center justify-center border-1 border-slate-400 flex-col gap-5 p-4 md:w-[80%] rounded-lg '>
+            <h1>{star} out of 5 Rating</h1>
+    <Star onRate={handleStar}/>
+    <button
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+         onClick={()=>handleRating(cardDetails._id)} >
+            Submit
+          </button>
+    <Link to={'/'}
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500  absolute top-[10px] right-[20px] "
+          >
+            Back to Home
+          </Link>
+        </div>
+      
+    </div>
+  )
+}
+
+export default Booked

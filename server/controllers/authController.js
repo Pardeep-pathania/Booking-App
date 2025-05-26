@@ -1,10 +1,11 @@
-const Users = require("../models/userModel");
+
 const bcryptjs = require("bcryptjs");
 const genToken = require("../config/token");
+const User = require("../models/userModel");
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await Users.find();
+    const users = await User.find();
 
     res.status(200).json(users);
   } catch (error) {
@@ -16,14 +17,14 @@ const registerUser = async (req, res) => {
   const data = req.body;
 
   try {
-    const existingUser = await Users.findOne({ email: data.email });
+    const existingUser = await User.findOne({ email: data.email });
 
     if (existingUser) {
       return res.status(400).json("User already exists");
     }
     const hashedPassword = bcryptjs.hashSync(data.password, 10);
 
-    const user = await Users.create({ ...data, password: hashedPassword });
+    const user = await User.create({ ...data, password: hashedPassword });
 
     res.status(201).json({ message: "User Registered successfully", user });
   } catch (error) {
@@ -34,7 +35,7 @@ const registerUser = async (req, res) => {
 let loginUser = async (req, res) => {
   let data = req.body;
   try {
-    let existingUser = await Users.findOne({ email: data.email }).populate("listing","title image1 image2 image3 description rent category city landmark");
+    let existingUser = await User.findOne({ email: data.email }).populate("listing","title image1 image2 image3 description rent category city landmark");
 
     if (!existingUser) {
       return res.status(400).json({ message: "User Not Found" });

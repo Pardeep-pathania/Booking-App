@@ -1,5 +1,6 @@
+const Booking = require("../models/bookingModel");
 const Listing = require("../models/listingModel");
-const Users = require ("../models/userModel");
+const User = require ("../models/userModel");
 
 const createBooking = async(req,res)=>{
     try {
@@ -20,17 +21,18 @@ const createBooking = async(req,res)=>{
         let booking = await Booking.create({
             checkIn,checkOut,totalRent,
             host:listing.host,
-            guest:res.userId,
+            guest:req.userId,
             listing:listing._id
         })
+        await booking.populate("host","email")
 
-        let user = await Users.findByIdAndUpdate(res.userId, {$push:{booking:listing}},{new:true})
+        let user = await User.findByIdAndUpdate(req.userId, {$push:{booking:listing}},{new:true})
 
         if(!user){
             return res.status(404).json({message:"User is not found"})
         }
 
-        listing.guest = res.userId
+        listing.guest = req.userId
         listing.isBooked = true
         await listing.save()
 
@@ -41,4 +43,23 @@ const createBooking = async(req,res)=>{
     }
 }
 
-module.exports = {createBooking}
+const cancelBooking = async(req,res)=>{
+    try{
+        let {id} = req.params;
+        let listing = await Listing.findByIdAndUpdate(id,{isBooked:false})
+        let user = await User.findByIdAndUpdate(listing.guest,{$pull:{booking:listing._id}},{new:true})
+
+        if(!user){
+            return res.status(404).json({message:"User Is not found"})
+        }
+        return res.status(200).json({message:"Booking Cancelled"})
+
+    }catch(error){
+
+        return res.status(400).json({message:"booking cancelled",error}
+        )
+
+    }
+}
+
+module.exports = {createBooking, cancelBooking}
