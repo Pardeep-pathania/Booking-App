@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import Navbar from '../components/Navbar'
+import { FaArrowLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
@@ -43,7 +43,9 @@ const {userData, setUserData}= useContext(userDataContext)
 
     
    
-      <div className='max-h-screen flex-grow flex items-center mt-2 justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4'>
+      <div className='max-h-screen h-screen flex-grow flex items-center mt-2 justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4 overflow-hidden'>
+         <div className='w-[50px] h-[50px] cursor-pointer bg-red-600 absolute top-[10%] left-[20px] rounded-full flex items-center justify-center'
+                onClick={()=>navigate('/')}><FaArrowLeft /></div>
         
         <div className='bg-white rounded-lg shadow-lg w-full max-w-md p-8'>
           <h1 className='text-4xl font-bold text-center text-gray-800 mb-8'>Login</h1>

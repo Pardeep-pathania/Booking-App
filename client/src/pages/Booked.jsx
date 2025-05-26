@@ -7,23 +7,26 @@ import Star from '../components/Star';
 import { authDataContext } from '../context/AuthContext';
 import { userDataContext } from '../context/UserContext';
 import { listingDataContext } from '../context/ListingContext';
+import axios from 'axios';
 
 
 const Booked = () => {
     let {bookingData} = useContext(bookingDataContext)
     const [star,setStar] = useState(null)
     let {serverUrl}= useContext(authDataContext)
-    let {currentUser} = useContext(userDataContext)
+    let {getCurrentUser} = useContext(userDataContext)
     let {getListing} = useContext(listingDataContext)
     let {cardDetails} = useContext(listingDataContext)
 
     let navigate = useNavigate()
 
+    {console.log("booking data", bookingData)}
+
 
     const handleRating = async(id)=>{
         try {
-            let result = await axios.post(serverUrl + `/booking/ratings/${id}`,{
-                rating:star
+            let result = await axios.post(serverUrl + `/listing/ratings/${id}`,{
+                ratings:star
             },{withCredentials:true})
             await getListing()
             await getCurrentUser()
@@ -49,13 +52,13 @@ const Booked = () => {
     Booking Confirmed
     </div>
     <div className='w-[100%] text-xl flex items-center justify-between  '>
-    <span>Booking Id:<span>{bookingData._id}</span></span>
+    <span>Booking Id:   <span>  {bookingData.booking?._id}</span></span>
     </div>
     <div className='w-[100%] text-xl flex items-center justify-between  '>
-    <span>Owner Details:<span>{bookingData.host?.email}</span></span>
+    <span>Owner Details:  <span>  {bookingData.booking?.host?.email}</span></span>
     </div>
     <div className='w-[100%] text-xl flex items-center justify-between  '>
-    <span>Total Rent:<span>{bookingData.totalRent}</span></span>
+    <span>Total Rent:  <span>  {bookingData.booking?.totalRent}</span></span>
     </div>
         </div>
 
@@ -68,7 +71,7 @@ const Booked = () => {
             Submit
           </button>
     <Link to={'/'}
-            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500  absolute top-[10px] right-[20px] "
+            className="w-auto py-2 px-16 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500  absolute top-[10px] right-[20px] "
           >
             Back to Home
           </Link>

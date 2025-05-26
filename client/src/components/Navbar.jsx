@@ -34,7 +34,7 @@ const Navbar = () => {
   const handleLogout = async()=>{
     try {
 
-      let result = await axios.post(serverUrl + "/auth/logout",{withCredentials:true})
+      let result = await axios.post(serverUrl + "/auth/logout",{},{withCredentials:true})
       setUserData(null)
       console.log(result.data)
       
@@ -65,12 +65,12 @@ const Navbar = () => {
   },[input])
 
   return (
-    <div className="fixed top-0 bg-white z-[20]">
-      <div className=" px-4 w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] flex items-center justify-between ">
-        <a href="" className="flex items-center gap-1">
-          <PiPaperPlaneBold className="text-2xl" />
-          <span className="text-xl font-bold">bookly</span>
-        </a>
+    <div className="fixed top-0 bg-white z-[20] ">
+      <div className=" px-8 w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] flex items-center justify-between ">
+        <Link to={'/'} className="flex items-center gap-1 text-[#F5385D]">
+          <PiPaperPlaneBold className="text-3xl" />
+          <span className="text-2xl font-bold">bookly</span>
+        </Link>
 
         <div className="w-[35%] relative md:block hidden">
           <input
@@ -97,7 +97,11 @@ const Navbar = () => {
             {userData == null && <span>
               <FaRegUserCircle className="text-lg" />
             </span>}
-            {userData !== null && <span className="w-[30px] h-[30px] bg-[#080808] text-white rounded-full flex items-center justify-center ">{userData?.name.slice(0,1).toUpperCase()}</span>}
+            {userData && userData.name && (
+  <span className="w-[30px] h-[30px] bg-[#080808] text-white rounded-full flex items-center justify-center ">
+    {userData.name.slice(0, 1).toUpperCase()}
+  </span>
+)}
           </button>
 
          {showpopup && <div className="w-[220px] h-[240px] absolute bg-white top-[12%] right-[5%] border border-gray-300 shadow-lg z-10 rounded-lg p-4">

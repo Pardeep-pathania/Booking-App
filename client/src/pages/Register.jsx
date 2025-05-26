@@ -44,7 +44,7 @@ alert("User registered successfully")
 
   return (
    
-      <div className='flex-grow flex items-center mt-2 justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4'>
+      <div className='flex-grow flex items-center mt-2 justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-4 h-screen'>
         <div className='w-[50px] h-[50px] cursor-pointer bg-red-600 absolute top-[10%] left-[20px] rounded-full flex items-center justify-center'
         onClick={()=>navigate('/')}><FaArrowLeft /></div>
         <div className='bg-white rounded-lg shadow-lg w-full max-w-md p-8'>
