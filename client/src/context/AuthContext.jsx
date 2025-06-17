@@ -3,8 +3,9 @@ import React, { createContext, useState } from 'react'
 export const authDataContext = createContext()
 
 const AuthContext = ({children}) => {
+  axios.defaults.withCredentials = true;
 
-    let serverUrl = import.meta.env.VITE_BACKEND_URL
+    let serverUrl = 'https://bookly-server-c470.onrender.com/'
 
     const [loading, setLoading] = useState(false)
 
