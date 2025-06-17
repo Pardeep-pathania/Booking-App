@@ -4,7 +4,7 @@ export const authDataContext = createContext()
 
 const AuthContext = ({children}) => {
 
-    let serverUrl = "http://localhost:5000/api"
+    let serverUrl = import.meta.env.VITE_BACKEND_URL
 
     const [loading, setLoading] = useState(false)
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Navbar from "./components/Navbar";
+import { ToastContainer } from 'react-toastify';
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -33,6 +33,9 @@ const {userData} = useContext(userDataContext)
         <Route path="/mybooking" element={userData != null ? <MyBooking/>:<Navigate to = {'/'}/>} />
         <Route path="/booked" element={userData != null ? <Booked/>:<Navigate to = {'/booked'}/>} />
       </Routes>
+
+     <ToastContainer />
+
     </div>
   );
 };

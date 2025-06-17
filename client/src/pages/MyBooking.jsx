@@ -20,13 +20,28 @@ const MyBooking = () => {
       </div>
 
       <div className="w-[100%] h-[90%] flex items-center justify-center gap-[25px] flex-wrap mt-[30px] ">
-
-         {
-                            userData.booking.map((list)=>(
-                                <Card title={list.title} landmark={list.landmark} city={list.city} image1={list.image1} image2={list.image2} image3={list.image3} rent={list.rent} id={list._id}  isBooked={list.isBooked} ratings={list.ratings} host={list.host}/>
-                            ))
-                        }
-       
+        {userData?.booking && userData.booking.length > 0 ? (
+          userData.booking.map((list) =>
+            list.listing ? (
+              <Card
+                key={list._id}
+                title={list.listing.title}
+                landmark={list.listing.landmark}
+                city={list.listing.city}
+                image1={list.listing.image1}
+                image2={list.listing.image2}
+                image3={list.listing.image3}
+                rent={list.listing.rent}
+                id={list.listing._id}
+                isBooked={list.listing.isBooked}
+                ratings={list.listing.ratings}
+                host={list.listing.host}
+              />
+            ) : null
+          )
+        ) : (
+          <div className="text-lg text-gray-500">No bookings found.</div>
+        )}
       </div>
     </div>
   );

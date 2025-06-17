@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
 import { userDataContext } from '../context/UserContext'
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -23,19 +24,24 @@ const {userData, setUserData}= useContext(userDataContext)
       try {
 
         e.preventDefault()
-       let result = await axios.post( serverUrl + "/auth/login", formdata,{withCredentials:true})
+       let result = await axios.post( serverUrl + "api/auth/login", formdata,{withCredentials:true})
 
        setUserData(result.data)
-
-         alert("User Logged In successfully")
+        
+         toast.success("User Logged In successfully",{position: 'top-center',
+          autoClose: 700
+         })
          setLoading(false)
-            console.log(result.data)
+          
             navigate('/')
         
       } catch (error) {
-        alert(error.response)
+        
+        toast.error(error.response.data.message,{position: 'top-center',
+          autoClose: 700
+         })
         setLoading(false)
-            console.log(error)
+        
       }
     }
 

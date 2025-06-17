@@ -8,6 +8,7 @@ import { userDataContext } from "../context/UserContext";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
 import { bookingDataContext } from "../context/BookingContext";
+import { toast } from "react-toastify";
 
 const ViewCard = () => {
   const navigate = useNavigate();
@@ -67,17 +68,21 @@ const ViewCard = () => {
      if(backEndImage2){formData.append("image2", backEndImage2)};
      if(backEndImage2){formData.append("image3", backEndImage3)};
 
-      const result = await axios.put(serverUrl + `/listing/update/${cardDetails._id}`, formData, {
+      const result = await axios.put(serverUrl + `api/listing/update/${cardDetails._id}`, formData, {
         withCredentials: true,
       });
 
-      console.log(result);
+      toast.success("Listing Updated",{position: 'top-center',
+          autoClose: 700
+         })
       setUpdating(false)
       navigate('/');
       resetForm();
     } catch (error) {
         setUpdating(false)
-      console.log(error);
+      toast.error(error.response.data.message,{position: 'top-center',
+          autoClose: 700
+         });
     }
   };
 
@@ -95,15 +100,19 @@ const ViewCard = () => {
   const handleDeleteListing = async()=>{
     setDeleting(true)
     try {
-         const result = await axios.delete(serverUrl + `/listing/deletelisting/${cardDetails._id}`,{
+         const result = await axios.delete(serverUrl + `api/listing/deletelisting/${cardDetails._id}`,{
         withCredentials: true,
       });
       console.log(result.data)
       navigate('/')
       setDeleting(false)
-      alert("Listing deleted successfully")
+      toast.success("Listing deleted successfully",{position: 'top-center',
+          autoClose: 700
+         })
     } catch (error) {
-
+      toast.error(error.response.data.message,{position: 'top-center',
+          autoClose: 700
+         })
       setDeleting(false)
         console.log(error)
     }
@@ -412,83 +421,7 @@ const ViewCard = () => {
       </p>
   </div>
    </div>
-
-
-  
-{/* <div class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50">
- 
-  <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-lg space-y-6">
-    
-    <form class="space-y-4">
-      <h2 class="text-xl font-semibold text-center">Confirm & Book</h2>
-      <div>
-        <label for="checkIn" class="block text-sm font-medium text-gray-600">Check In</label>
-        <input
-          id="checkIn"
-          name="checkIn"
-          type="date"
-          min="2025-05-26"
-          required
-          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-      <div>
-        <label for="checkOut" class="block text-sm font-medium text-gray-600">Check Out</label>
-        <input
-          id="checkOut"
-          name="checkOut"
-          type="date"
-          min="2025-05-26"
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-      <div>
-        <button
-          type="submit"
-          class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
-        >
-          Book Now
-        </button>
-      </div>
-    </form>
-    
-    <div class="flex items-center justify-between space-x-4">
-      <div class="w-1/3">
-        <img class="w-full h-auto rounded-lg" src="image1.jpg" alt="Card Image" />
-      </div>
-      <div class="w-2/3">
-        <h3 class="text-lg font-medium text-gray-700">IN LANDMARK, CITY</h3>
-        <p class="text-sm text-gray-500">Title</p>
-        <p class="text-sm text-gray-500">Category</p>
-        <p class="flex items-center text-sm text-gray-500">
-          <span class="text-yellow-500">★</span> Rating
-        </p>
-        <div class="mt-4">
-          <p class="flex justify-between text-sm text-gray-600">
-            <span>Booking Price</span>
-            <span>Rs Rent X Nights</span>
-          </p>
-          <p class="flex justify-between text-sm text-gray-600">
-            <span>Tax</span>
-            <span>Rs Tax Amount</span>
-          </p>
-          <p class="flex justify-between text-sm text-gray-600">
-            <span>Bookly Charge</span>
-            <span>Rs Charge Amount</span>
-          </p>
-          <p class="flex justify-between text-sm text-gray-600 font-semibold">
-            <span>Total Price</span>
-            <span>Rs Total Amount</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> */}
-
-
-      
+     
       </div>
 }
     </div>
@@ -496,4 +429,3 @@ const ViewCard = () => {
 };
 
 export default ViewCard;
-

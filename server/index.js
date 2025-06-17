@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 
@@ -10,19 +9,24 @@ const connectDb = require('./config/db')
 const userRouter = require('./routes/userRouter.js')
 const listingRouter = require('./routes/listingRoute.js')
 const bookingRouter = require('./routes/bookingRouter.js')
+
+
 const app = express()
 const port = process.env.PORT || 3000
 
+
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors({
     origin: 'http://localhost:5173', // your frontend URL
     credentials: true
 }))
-app.use(cookieParser())
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/listing', listingRouter)
 app.use('/api/booking', bookingRouter)
+
+
 
 app.get('/',(req,res)=>{
     res.json("Hello World")

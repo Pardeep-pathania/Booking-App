@@ -1,39 +1,43 @@
-import React from 'react'
-import { useContext } from 'react'
-import { createContext } from 'react'
-import { authDataContext } from './AuthContext'
-import { useState } from 'react'
-import axios from 'axios'
-import { useEffect } from 'react'
+import React from "react";
+import { useContext } from "react";
+import { createContext } from "react";
+import { authDataContext } from "./AuthContext";
+import { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
-export const userDataContext = createContext()
+export const userDataContext = createContext();
 
-const UserContext = ({children}) => {
+const UserContext = ({ children }) => {
+  let { serverUrl } = useContext(authDataContext);
+  const [userData, setUserData] = useState(null);
 
-    let {serverUrl} = useContext(authDataContext);
-    const [userData, setUserData] = useState(null);
+  const getCurrentUser = async () => {
+    try {
+      let result = await axios.get(serverUrl + "api/user/currentuser", {
+        withCredentials: true,
+      });
 
-    const getCurrentUser = async()=>{
-        try {
-
-            let result = await axios.get(serverUrl + "/user/currentuser", {withCredentials: true})
-
-            setUserData(result.data)
-            
-        } catch (error) {
-            setUserData(null)
-            console.log(error)
-        }
+      setUserData(result.data);
+    } catch (error) {
+      setUserData(null);
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 700,
+      });
     }
+  };
 
-    useEffect(()=>{
-        getCurrentUser()
-    },[])
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
-    let value = {
-        userData,
-        setUserData,getCurrentUser
-    }
+  let value = {
+    userData,
+    setUserData,
+    getCurrentUser,
+  };
 
   return (
     <div>
@@ -41,7 +45,7 @@ const UserContext = ({children}) => {
         {children}
       </userDataContext.Provider>
     </div>
-  )
-}
+  );
+};
 
-export default UserContext
+export default UserContext;

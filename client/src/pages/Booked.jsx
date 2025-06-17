@@ -8,6 +8,7 @@ import { authDataContext } from '../context/AuthContext';
 import { userDataContext } from '../context/UserContext';
 import { listingDataContext } from '../context/ListingContext';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 
 const Booked = () => {
@@ -20,20 +21,25 @@ const Booked = () => {
 
     let navigate = useNavigate()
 
-    {console.log("booking data", bookingData)}
-
 
     const handleRating = async(id)=>{
         try {
-            let result = await axios.post(serverUrl + `/listing/ratings/${id}`,{
+            let result = await axios.post(serverUrl + `api/listing/ratings/${id}`,{
                 ratings:star
             },{withCredentials:true})
+
+            toast.success("Thankyou for rating",{position: 'top-center',
+                      autoClose: 700
+                     })
+
             await getListing()
             await getCurrentUser()
-            console.log(result)
+            
             navigate('/')
         } catch (error) {
-            console.log(error)
+            toast.error("error.response.data.message",{position: 'top-center',
+                      autoClose: 700
+                     })
         }
     }
 

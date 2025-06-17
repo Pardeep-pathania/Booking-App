@@ -4,6 +4,7 @@ const getCurrentUser = async(req,res)=>{
     try {
         let user = await User.findById(req.userId).select("-password").populate("listing","title image1 image2 image3 description rent category city landmark isBooked host ratings")
         .populate("booking","title image1 image2 image3 description rent category city landmark isBooked host ratings")
+      
         if(!user){
            return res.status(400).json({message:"User not found"})
         }

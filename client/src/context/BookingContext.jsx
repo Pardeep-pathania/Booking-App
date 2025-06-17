@@ -4,6 +4,7 @@ import { authDataContext } from './AuthContext'
 import { userDataContext } from './UserContext'
 import { listingDataContext } from './ListingContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const bookingDataContext = createContext()
 
@@ -26,19 +27,26 @@ const BookingContext = ({children}) => {
     const handleBooking = async(id) =>{
             setBooking(true)
         try {
-            let result = await axios.post(serverUrl + `/booking/create/${id}`,{
+            let result = await axios.post(serverUrl + `api/booking/create/${id}`,{
                 checkIn, checkOut, totalRent:total
             },{withCredentials:true})
+
+            toast.success("Booking completed",{position: 'top-center',
+                      autoClose: 700
+                     })
 
             await getCurrentUser()
             await getListing()
             setBooking(false)
             setBookingData(result.data)
             navigate('/booked')
+
             console.log(result.data)
-            {console.log(bookingData)}
             
         } catch (error) {
+            toast.success(error.response.data.message,{position: 'top-center',
+                      autoClose: 700
+                     })
             setBooking(false)
             console.log(error)
             setBookingData(null)
@@ -51,15 +59,21 @@ const BookingContext = ({children}) => {
     const cancelBooking = async(id) =>{
 
         try {
-            let result = await axios.delete(serverUrl + `/booking/cancel/${id}`,{withCredentials:true})
+            let result = await axios.delete(serverUrl + `api/booking/cancel/${id}`,{withCredentials:true})
+
+            toast.success("Booking Cancelled",{position: 'top-center',
+                      autoClose: 700
+                     })
 
             await getCurrentUser()
             await getListing()
-            console.log(result.data)
             
         } catch (error) {
 
-            console.log(error)
+            toast.success(error.response.data.message,{position: 'top-center',
+                      autoClose: 700
+                     })
+
             
         }
 

@@ -18,6 +18,7 @@ import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
 import { userDataContext } from "../context/UserContext";
 import { listingDataContext } from "../context/ListingContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -34,12 +35,18 @@ const Navbar = () => {
   const handleLogout = async()=>{
     try {
 
-      let result = await axios.post(serverUrl + "/auth/logout",{},{withCredentials:true})
+      let result = await axios.post(serverUrl + "api/auth/logout",{},{withCredentials:true})
       setUserData(null)
       console.log(result.data)
-      
+      toast.success("Logout Successfully",{
+        autoClose:700,
+        position:'top-center'
+      })
     } catch (error) {
-      console.log(`logout error ${error}`)
+      toast.error(error.response.data.message,{
+        autoClose:700,
+        position:'top-center'
+      })
     }
   }
 

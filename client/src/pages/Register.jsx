@@ -5,6 +5,7 @@ import axios from 'axios'
 import { FaArrowLeft } from "react-icons/fa";
 import { authDataContext } from '../context/AuthContext';
 import { userDataContext } from '../context/UserContext';
+import { toast } from 'react-toastify';
 
 const Register = () => {
 
@@ -24,10 +25,12 @@ const Register = () => {
 
       try {
        e.preventDefault()
-        let result =await axios.post( serverUrl + "/auth/register", formdata,{withCredentials:true})
+        let result =await axios.post( serverUrl + "api/auth/register", formdata,{withCredentials:true})
         
 
-alert("User registered successfully")
+toast.success("User registered successfully",{position: 'top-center',
+          autoClose: 700
+         })
       setLoading(false)
 
         setUserData(result.data)
@@ -35,7 +38,9 @@ alert("User registered successfully")
             navigate('/login')
 
       } catch (error) {
-         alert(error.response)
+         toast.error(error.response.data.message,{position: 'top-center',
+          autoClose: 700
+         })
       setLoading(false)
 
             console.log(error)

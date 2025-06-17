@@ -7,4 +7,5 @@ const router = express.Router()
 router.post('/create/:id',isAuth, createBooking)
 router.delete('/cancel/:id',isAuth, cancelBooking)
 
+
 module.exports = router
